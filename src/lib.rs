@@ -8,8 +8,8 @@ use thiserror::Error;
 
 #[derive(Debug)]
 pub struct Package {
-    name: String,
-    version: String,
+    pub name: String,
+    pub version: String,
     /* source: Option<String>,
     dependencies: Option<HashMap<String, Value>>, */
 }

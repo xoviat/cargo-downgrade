@@ -1,23 +1,35 @@
 [package]
-name = "downgrade"
+name = "cargo-downgrade"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+description = "Cargo plugin to downgrade the lockfile to a specific date"
+license = "Apache-2.0/MIT"
+categories = [
+  "command-line-utilities",
+  "config",
+  "development-tools",
+  "development-tools::cargo-plugins",
+  "parsing",
+]
+keywords = ["binary", "cargo", "cli", "dev-tools", "query"]
+readme = "README.md"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [[bin]]
-name = "downgrade"
+name = "cargo-downgrade"
 path = "src/main.rs"
 
 [dependencies]
 thiserror = "1.0"
 chrono = "0.4"
 futures = "0.3"
-crates_io_api = { version = "0.8", default-features = false, features = ["rustls"] }
+crates_io_api = { version = "0.12", default-features = false, features = ["rustls"] }
 tokio = { version = "1.0", features = ["full"] }
-cargo-lock = { version = "9.0", features = ["dependency-tree"] }
+cargo-lock = { version = "11.0", features = ["dependency-tree"] }
 log = "0.4"
 simple_logger = { version = "4.2", features = ["stderr"] }
-petgraph = "0.6"
+petgraph = "0.8"
 clap = { version = "4.4", features = ["derive"] }
 error_reporter = "1.0"
