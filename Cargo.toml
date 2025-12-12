@@ -22,14 +22,14 @@ name = "cargo-downgrade"
 path = "src/main.rs"
 
 [dependencies]
-thiserror = "1.0"
+thiserror = "2.0"
 chrono = "0.4"
 futures = "0.3"
 crates_io_api = { version = "0.12", default-features = false, features = ["rustls"] }
 tokio = { version = "1.0", features = ["full"] }
 cargo-lock = { version = "11.0", features = ["dependency-tree"] }
 log = "0.4"
-simple_logger = { version = "4.2", features = ["stderr"] }
+simple_logger = { version = "5.1", features = ["stderr"] }
 petgraph = "0.8"
 clap = { version = "4.4", features = ["derive"] }
 error_reporter = "1.0"

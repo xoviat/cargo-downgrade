@@ -1,29 +1,36 @@
 use chrono::DateTime;
 use clap::{Parser, Subcommand};
 use error_reporter::Report;
-use futures::lock;
 use std::{
+    env::args_os,
     io::{self, Write},
     num::NonZeroU8,
     path::PathBuf,
     process::Command,
 };
 
+#[derive(Debug, clap::Args)]
+#[group(required = true, multiple = false)]
+pub struct Group {
+    /// Date to which the dependencies should be downgraded. In RFC 2822 format, e.g. "22 Feb 2021 23:16:09 GMT"
+    #[clap(long, short)]
+    date: Option<String>,
+
+    /// Get the date from git
+    #[clap(long, action)]
+    git: bool,
+}
+
 #[derive(Parser, Debug)]
 struct CliArguments {
     /// Path to the Cargo.lock file.
     cargo_lock: Option<PathBuf>,
 
-    /// Date to which the dependencies should be downgraded. In RFC 2822 format, e.g. "22 Feb 2021 23:16:09 GMT"
-    #[clap(long, short)]
-    date: String,
-
-    /// Get the date from git
-    #[clap(long, short)]
-    git: bool,
+    #[clap(flatten)]
+    group: Group,
 
     /// Actually run the downgrade
-    #[clap(long, short)]
+    #[clap(long, action)]
     run: bool,
 
     #[clap(subcommand)]
@@ -64,10 +71,15 @@ fn get_timestamp_from_git() -> Option<DateTime<chrono::Utc>> {
 #[tokio::main]
 async fn main() {
     simple_logger::init_with_level(log::Level::Info).unwrap();
-    let mut args = CliArguments::parse();
-
-    args.run = true;
-    args.git = true;
+    let args = CliArguments::parse_from(
+        args_os()
+            .into_iter()
+            .enumerate()
+            .filter(|(i, _str)| {
+                *i != 0 // || str.to_str().unwrap() == "downgrade"
+            })
+            .map(|(_, str)| str),
+    );
 
     let lock_path = match args.cargo_lock {
         Some(path) => path,
@@ -77,7 +89,8 @@ async fn main() {
             path
         }
     };
-    let cargo_lock = cargo_lock::Lockfile::load(lock_path).unwrap();
+
+    let cargo_lock = cargo_lock::Lockfile::load(lock_path).expect("unable to open cargo.lock");
     let dependency_tree = cargo_lock.dependency_tree().unwrap();
 
     let crate_names = match &args.modes {
@@ -95,10 +108,10 @@ async fn main() {
         }
     };
 
-    let datetime = if args.git {
+    let datetime = if args.group.git {
         get_timestamp_from_git().unwrap()
     } else {
-        DateTime::parse_from_rfc2822(&args.date)
+        DateTime::parse_from_rfc2822(&args.group.date.unwrap())
             .unwrap()
             .with_timezone(&chrono::Utc)
     };
