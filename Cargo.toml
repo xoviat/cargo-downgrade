@@ -1,6 +1,6 @@
 [package]
 name = "cargo-downgrade"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Cargo plugin to downgrade the lockfile to a specific date"
 license = "Apache-2.0/MIT"
