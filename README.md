@@ -1,4 +1,5 @@
 # cargo-downgrade
+```
 Usage: downgrade [OPTIONS] <--date <DATE>|--git> [CARGO_LOCK] <COMMAND>
 
 Commands:
@@ -14,3 +15,4 @@ Options:
       --git          Get the date from git
       --run          Actually run the downgrade
   -h, --help         Print help
+```
