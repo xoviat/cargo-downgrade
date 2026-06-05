@@ -1,6 +1,6 @@
 [package]
 name = "cargo-downgrade"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "Cargo plugin to downgrade the lockfile to a specific date"
 license = "Apache-2.0/MIT"
@@ -26,10 +26,10 @@ thiserror = "2.0"
 chrono = "0.4"
 futures = "0.3"
 crates_io_api = { version = "0.12", default-features = false, features = ["rustls"] }
-tokio = { version = "1.0", features = ["full"] }
+tokio = { version = "1.52", features = ["full"] }
 cargo-lock = { version = "11.0", features = ["dependency-tree"] }
 log = "0.4"
-simple_logger = { version = "5.1", features = ["stderr"] }
+simple_logger = { version = "5.2", features = ["stderr"] }
 petgraph = "0.8"
-clap = { version = "4.4", features = ["derive"] }
+clap = { version = "4.6", features = ["derive"] }
 error_reporter = "1.0"
